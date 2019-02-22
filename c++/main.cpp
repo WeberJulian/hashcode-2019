@@ -23,7 +23,8 @@ struct Slice
 void printPizza(char **pizza, int R, int C);
 void freePizza(char **pizza, int R);
 void exportSolution(vector<Slice> slices);
-int randomInt(int min, int max);
+int randomInt(int min, int max); // max included
+Slice getRandomSlice(int R, int C);
 
 int main()
 {
@@ -44,12 +45,9 @@ int main()
 
    char **pizza = new char *[R];
    vector<Slice> slices;
-   Slice hello;
-   hello.r1 = 1;
-   hello.c1 = 1;
-   hello.r2 = 2;
-   hello.c2 = 2;
-   slices.push_back(hello);
+   slices.push_back(getRandomSlice(R, C));
+   slices.push_back(getRandomSlice(R, C));
+   slices.push_back(getRandomSlice(R, C));
    for (int i = 0; i < R; i++)
       pizza[i] = new char[C];
 
@@ -100,4 +98,15 @@ void exportSolution(vector<Slice> slices){
 
 int randomInt(int min, int max){
    return min + rand() % (max + 1) ;
+}
+
+Slice getRandomSlice(int R, int C) {
+   Slice slice;
+   int r = randomInt(0, R);
+   int c = randomInt(0, C);
+   slice.r1 = r;
+   slice.c1 = c;
+   slice.r2 = r + randomInt(0, R - r);
+   slice.c2 = c + randomInt(0, C - c);
+   return slice;
 }
