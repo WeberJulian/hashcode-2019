@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <time.h>
+#include <sys/time.h>
 using namespace std;
 
 const int dataset = 1;
@@ -25,9 +26,13 @@ void freePizza(char **pizza, int R);
 void exportSolution(vector<Slice> slices);
 int randomInt(int min, int max); // max included
 Slice getRandomSlice(int R, int C);
+bool goodSize(Slice slice, int R, int C, int L, int H);
+int countPoints(vector<Slice> slices);
+long now();
 
 int main()
 {
+   srand (time(NULL));
    int R, C, L, H;
    string line;
    getline(input, line);
@@ -47,7 +52,7 @@ int main()
    vector<Slice> slices;
    slices.push_back(getRandomSlice(R, C));
    slices.push_back(getRandomSlice(R, C));
-   slices.push_back(getRandomSlice(R, C));
+   cout << goodSize(slices[0], R, C, L, H) << endl;
    for (int i = 0; i < R; i++)
       pizza[i] = new char[C];
 
@@ -109,4 +114,41 @@ Slice getRandomSlice(int R, int C) {
    slice.r2 = r + randomInt(0, R - r);
    slice.c2 = c + randomInt(0, C - c);
    return slice;
+}
+
+bool goodSize(Slice slice, int R, int C, int L, int H){
+   if(!(
+         slice.r1 >= 0 && 
+         slice.c1 >= 0 &&
+         slice.r2 >= 0 && 
+         slice.c2 >= 0 &&
+         slice.r1 < R &&
+         slice.c1 < C &&
+         slice.r2 < R &&
+         slice.c2 < C &&
+         (slice.r2-slice.r1+1) * (slice.c2-slice.c1+1) >= 2*L &&
+         (slice.r2-slice.r1+1) * (slice.c2-slice.c1+1) <= H
+   )){
+      return false;
+   }
+   else{
+      return true;
+   }
+}
+
+int countPoints(vector<Slice> slices){
+   int points = 0;
+   Slice slice;
+   for(int i = 0; i < slices.size(); i++){
+      slice = slices[i];
+      points += (slice.r2 - slice.r1 + 1) * (slice.c2 - slice.c1 + 1);
+   }
+   return points;
+}
+
+long now(){
+   struct timeval tp;
+   gettimeofday(&tp, NULL);
+   long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
+   return ms;
 }
