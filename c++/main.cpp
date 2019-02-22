@@ -7,7 +7,7 @@
 #include <sys/time.h>
 using namespace std;
 
-const int dataset = 1;
+const int dataset = 3;
 const string filenames[4] = {"a_example.in", "b_small.in", "c_medium.in", "d_big.in"};
 const string filename = filenames[dataset];
 
@@ -28,7 +28,10 @@ int randomInt(int min, int max); // max included
 Slice getRandomSlice(int R, int C);
 bool goodSize(Slice slice, int R, int C, int L, int H);
 int countPoints(vector<Slice> slices);
-long now();
+bool noOverlaps(vector<Slice> slices, Slice slice);
+bool enoughL(int L, Slice slice, char **pizza);
+bool validSlice(Slice slice, vector<Slice> slices, char **pizza, int R, int C, int L, int H);
+long long now();
 
 int main()
 {
@@ -49,10 +52,6 @@ int main()
    line = line.substr(line.find(delimiter) + 1, line.length() - 1);
 
    char **pizza = new char *[R];
-   vector<Slice> slices;
-   slices.push_back(getRandomSlice(R, C));
-   slices.push_back(getRandomSlice(R, C));
-   cout << goodSize(slices[0], R, C, L, H) << endl;
    for (int i = 0; i < R; i++)
       pizza[i] = new char[C];
 
@@ -66,6 +65,17 @@ int main()
       j++;
    }
    //printPizza(pizza, R, C);
+   long long t0 = now();
+   Slice slice;
+   vector<Slice> slices;
+   while(now() - t0 < 1000 * 15){
+      slice = getRandomSlice(R, C);
+      if (validSlice(slice, slices, pizza, R, C, L, H)) {
+         slices.push_back(slice);
+      }
+   }
+
+   cout << countPoints(slices) << endl;
    freePizza(pizza, R);
    exportSolution(slices);
    return 0;
@@ -146,9 +156,65 @@ int countPoints(vector<Slice> slices){
    return points;
 }
 
-long now(){
-   struct timeval tp;
-   gettimeofday(&tp, NULL);
-   long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
-   return ms;
+long long now(){
+   struct timeval tv;
+   gettimeofday(&tv, NULL);
+   unsigned long long millisecondsSinceEpoch =
+    (unsigned long long)(tv.tv_sec) * 1000 +
+    (unsigned long long)(tv.tv_usec) / 1000;
+   return millisecondsSinceEpoch;
+}
+
+bool noOverlaps(vector<Slice> slices, Slice slice){
+   for(double i = 0; i < slices.size(); i++){
+      bool over = false;
+      bool left = false;
+      
+      if(slice.c1 > slices[i].c2 || slices[i].c1 > slice.c2){
+            left = true;
+      }
+
+      if(slice.r2 < slices[i].r1 || slices[i].r2 < slice.r1){
+            over = true;
+      }
+
+      if (!(over || left)){
+            return false;
+      }      
+   }
+   return true;
+}
+
+bool enoughL(int L, Slice slice, char **pizza){
+   int M = 0;
+   int T = 0;
+   for (int i = 0; i < slice.r2 - slice.r1 + 1; i++){
+      for (int j = 0; j < slice.c2 - slice.c1 + 1; j++){
+         if(pizza[slice.r1 + i][slice.c1 + j] == 'T'){
+            T += 1;
+         }
+         if(pizza[slice.r1 + i][slice.c1 + j] == 'M'){
+            M += 1;
+         }
+      }
+   }
+   if(T >= L && M >= L){
+      return true;
+   }
+   else{
+      return false;
+   }
+}
+
+bool validSlice(Slice slice, vector<Slice> slices, char **pizza, int R, int C, int L, int H) {
+    if (!goodSize(slice, R, C, L, H)) {
+        return false;
+    }
+    if (!enoughL(L, slice, pizza)) {
+        return false;
+    }
+    if (!noOverlaps(slices, slice)) {
+        return false;
+    }
+    return true;
 }
