@@ -2,6 +2,7 @@
 #include <fstream>
 #include <array>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 const int dataset = 1;
@@ -25,19 +26,26 @@ void exportSolution(vector<Slice> slices);
 int main()
 {
 
-   int L, H;
+   int R, C, L, H;
    string line;
    getline(input, line);
    string delimiter = " ";
 
-   int const R = stoi(line.substr(0, line.find(delimiter)));
+   std::string::size_type sz;
+
+   R = stoi(line.substr(0, line.find(delimiter)),&sz);
    line = line.substr(line.find(delimiter) + 1, line.length() - 1);
-   int const C = stoi(line.substr(0, line.find(delimiter)));
+   C = stoi(line.substr(0, line.find(delimiter)),&sz);
    line = line.substr(line.find(delimiter) + 1, line.length() - 1);
-   L = stoi(line.substr(0, line.find(delimiter)));
+   L = stoi(line.substr(0, line.find(delimiter)),&sz);
    line = line.substr(line.find(delimiter) + 1, line.length() - 1);
-   H = stoi(line.substr(0, line.find(delimiter)));
+   H = stoi(line.substr(0, line.find(delimiter)),&sz);
    line = line.substr(line.find(delimiter) + 1, line.length() - 1);
+
+   cout << R << endl;
+   cout << C << endl;
+   cout << L << endl;
+   cout << H << endl;
 
    char **pizza = new char *[R];
    vector<Slice> slices;
