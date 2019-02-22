@@ -25,12 +25,10 @@ void exportSolution(vector<Slice> slices);
 
 int main()
 {
-
    int R, C, L, H;
    string line;
    getline(input, line);
    string delimiter = " ";
-
    std::string::size_type sz;
 
    R = stoi(line.substr(0, line.find(delimiter)),&sz);
@@ -41,11 +39,6 @@ int main()
    line = line.substr(line.find(delimiter) + 1, line.length() - 1);
    H = stoi(line.substr(0, line.find(delimiter)),&sz);
    line = line.substr(line.find(delimiter) + 1, line.length() - 1);
-
-   cout << R << endl;
-   cout << C << endl;
-   cout << L << endl;
-   cout << H << endl;
 
    char **pizza = new char *[R];
    vector<Slice> slices;
@@ -67,7 +60,7 @@ int main()
       }
       j++;
    }
-   printPizza(pizza, R, C);
+   //printPizza(pizza, R, C);
    freePizza(pizza, R);
    exportSolution(slices);
    return 0;
