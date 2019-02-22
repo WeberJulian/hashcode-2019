@@ -4,7 +4,9 @@
 #include <vector>
 using namespace std;
 
-const string filename = "a_example.in";
+const int dataset = 1;
+const string filenames[4] = {"a_example.in", "b_small.in", "c_medium.in", "d_big.in"};
+const string filename = filenames[dataset];
 
 ifstream input("datasets/"+filename);
 
