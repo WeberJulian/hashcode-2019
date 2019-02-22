@@ -5,6 +5,7 @@
 #include <sstream>
 #include <time.h>
 #include <sys/time.h>
+#include <ctime>
 using namespace std;
 
 const int dataset = 3;
@@ -64,11 +65,11 @@ int main()
       }
       j++;
    }
-   //printPizza(pizza, R, C);
-   long long t0 = now();
+   time_t t0;
+   time(&t0);
    Slice slice;
    vector<Slice> slices;
-   while(now() - t0 < 1000 * 15){
+   while(difftime(time(NULL), t0)<= 15){
       slice = getRandomSlice(R, C);
       if (validSlice(slice, slices, pizza, R, C, L, H)) {
          slices.push_back(slice);
