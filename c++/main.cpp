@@ -3,6 +3,7 @@
 #include <array>
 #include <vector>
 #include <sstream>
+#include <time.h>
 using namespace std;
 
 const int dataset = 1;
@@ -22,6 +23,7 @@ struct Slice
 void printPizza(char **pizza, int R, int C);
 void freePizza(char **pizza, int R);
 void exportSolution(vector<Slice> slices);
+int randomInt(int min, int max);
 
 int main()
 {
@@ -94,4 +96,8 @@ void exportSolution(vector<Slice> slices){
       myfile << to_string(slices[i].r1) + " " + to_string(slices[i].c1) + " " + to_string(slices[i].r2) + " " + to_string(slices[i].c2) + " \n";
    }
    myfile.close();
+}
+
+int randomInt(int min, int max){
+   return min + rand() % (max + 1) ;
 }
