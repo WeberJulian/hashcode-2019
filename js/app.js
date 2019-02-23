@@ -3,7 +3,7 @@ var validation = require("./validation")
 var plotly = require('plotly')('julian78w', 'eKmfNHsJM6RTPwbTmZDC'); //By the time you read this key, it won't be valid anymore ;)
 var files = ['a_example.in', 'b_small.in', 'c_medium.in', 'd_big.in']
 
-var dataset = 3
+var dataset = 1
 var [R, C, L, H, pizza] = io.load(files[dataset])
 
 main()
@@ -19,28 +19,31 @@ function main() {
     let scores = []
     let lengths = []
 
-    let batch = Math.pow(((R + C) / 2), 2)
+    let batch = (R + C)
     let flag = true
 
-    while (Date.now() - t0 < 1000 * 5 * 60 && flag) {
+    while (Date.now() - t0 < 100 && flag) {
         counter += 1
         slice = getRandomSlice()
         if (validSlice(slice, slices)) {
             slices.push(slice)
         }
-        if (counter / batch == Math.floor(counter / batch)) {
-            scores.push(validation.countPoints(slices))
-            counters.push(counter)
-            lengths.push(slices.length)
-        }
+        // if (counter / batch == Math.floor(counter / batch)) {
+        //     scores.push(validation.countPoints(slices))
+        //     counters.push(counter)
+        //     lengths.push(slices.length)
+        // }
     }
 
-    console.log("score : " + validation.countPoints(slices))
+    let score = validation.countPoints(slices)
+    console.log("score : " + score)
     console.log("Runtime : " + (Date.now() - t0) / 1000)
 
-    io.export(slices, files[dataset])
+    if (io.checkBestScore(score, files[dataset])){
+        io.export(slices, files[dataset], score)
+    }
 
-    plotResults(counters, scores)
+    //plotResults(counters, scores)
 }
 
 

@@ -8,15 +8,34 @@ module.exports = {
         pizza.splice(-1,1)
         return [parseInt(R), parseInt(C), parseInt(L), parseInt(H), pizza]
     },
-    export: (slices, dataset) => {
+    export: (slices, dataset, score) => {
         let filename = 'solution_' + dataset
+        let scoreFile = 'score_' + dataset
         try{
             fs.unlinkSync("solutions/"+filename)
+            fs.unlinkSync("solutions/scores/"+scoreFile)
         }catch(e){}
         fs.appendFileSync("solutions/"+filename, slices.length.toString() + "\n")
         slices.map((slice)=>{
             fs.appendFileSync("solutions/"+filename, aggregate(slice) + "\n")
         })
+        fs.appendFileSync("solutions/scores/"+scoreFile, score.toString())
+    },
+    checkBestScore: (score, file) => {
+        let scoreFile = 'score_' + file
+        if (fs.existsSync("solutions/scores/"+scoreFile)) {
+            let contents = fs.readFileSync("solutions/scores/"+scoreFile, 'utf8')
+            let bestScore = parseInt(contents)
+            if(score > bestScore){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        else{
+            return true
+        }
     }
 }
 
