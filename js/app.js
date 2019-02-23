@@ -3,7 +3,8 @@ var validation = require("./validation")
 var plotly = require('plotly')('julian78w', 'eKmfNHsJM6RTPwbTmZDC'); //By the time you read this key, it won't be valid anymore ;)
 var files = ['a_example.in', 'b_small.in', 'c_medium.in', 'd_big.in']
 
-var dataset = 1
+var dataset = 3
+var duration = 1000 * 60 * 3
 var [R, C, L, H, pizza] = io.load(files[dataset])
 
 main()
@@ -19,10 +20,10 @@ function main() {
     let scores = []
     let lengths = []
 
-    let batch = (R + C)
+    let batch = Math.pow(R + C, 2)
     let flag = true
 
-    while (Date.now() - t0 < 100 && flag) {
+    while (Date.now() - t0 < duration && flag) {
         counter += 1
         slice = getRandomSlice()
         if (validSlice(slice, slices)) {
@@ -37,13 +38,12 @@ function main() {
 
     let score = validation.countPoints(slices)
     console.log("score : " + score)
-    console.log("Runtime : " + (Date.now() - t0) / 1000)
 
     if (io.checkBestScore(score, files[dataset])){
         io.export(slices, files[dataset], score)
     }
 
-    //plotResults(counters, scores)
+    // plotResults(counters, scores)
 }
 
 
