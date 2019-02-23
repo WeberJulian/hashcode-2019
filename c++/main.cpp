@@ -69,7 +69,7 @@ int main()
    time(&t0);
    Slice slice;
    vector<Slice> slices;
-   while(difftime(time(NULL), t0)<= 15){
+   while(difftime(time(NULL), t0)<= 60 * 60 * 9){
       slice = getRandomSlice(R, C);
       if (validSlice(slice, slices, pizza, R, C, L, H)) {
          slices.push_back(slice);

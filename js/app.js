@@ -22,7 +22,7 @@ function main() {
     let batch = Math.pow(((R + C) / 2), 2)
     let flag = true
 
-    while (Date.now() - t0 < 1000 * 15 && flag) {
+    while (Date.now() - t0 < 1000 * 5 * 60 && flag) {
         counter += 1
         slice = getRandomSlice()
         if (validSlice(slice, slices)) {
