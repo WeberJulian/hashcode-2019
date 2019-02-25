@@ -3,8 +3,8 @@ var validation = require("./validation")
 var plotly = require('plotly')('julian78w', 'eKmfNHsJM6RTPwbTmZDC'); //By the time you read this key, it won't be valid anymore ;)
 var files = ['a_example.in', 'b_small.in', 'c_medium.in', 'd_big.in']
 
-var dataset = 3
-var duration = 1000 * 60 * 3
+var dataset = 0
+var duration = 10
 var [R, C, L, H, pizza] = io.load(files[dataset])
 
 main()
